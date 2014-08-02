@@ -27,15 +27,17 @@ public class Snake {
 	private float y;
 	private long previousTime;
 
-	public Snake(Context context) {
+	public Snake(Context context, Rect rect) {
 
 		Resources res = context.getResources();
 		// cache handles to our key sprites & other drawables
 		// mSegment = context.getResources().getDrawable(R.drawable.snake);
 
-		mRect = Configurator.getRect();
+//		mRect = Configurator.getRect();
+		mRect = rect;
 		mSnakeBitMap = Bitmap.createBitmap(mRect.width(), mRect.height(),
 				Config.ARGB_8888);
+
 		mSnakeBitMap.eraseColor(Color.BLACK);
 		x = 100f;
 		y = 100f;

@@ -63,22 +63,23 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
 
     private TouchRect touchLRect;
     private TouchRect touchRRect;
+    private Context context;
     
     public LunarView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+        this.context = context;
         // register our interest in hearing about changes to our surface
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
-        // create thread only; it's started in surfaceCreated()
-        thread = new LunarThread(holder, context, new Handler() {
-            @Override
-            public void handleMessage(Message m) {
-                mStatusText.setVisibility(m.getData().getInt("viz"));
-                mStatusText.setText(m.getData().getString("text"));
-            }
-        });
+//        // create thread only; it's started in surfaceCreated()
+//        thread = new LunarThread(holder, context, new Handler() {
+//            @Override
+//            public void handleMessage(Message m) {
+//                mStatusText.setVisibility(m.getData().getInt("viz"));
+//                mStatusText.setText(m.getData().getString("text"));
+//            }
+//        });
 
         setFocusable(true); // make sure we get key events
     }
@@ -157,11 +158,24 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
     /* Callback invoked when the surface dimensions change. */
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
             int height) {
+    	Rect snakeRect = new Rect(0,0,width,height);
     	Rect rectL = new Rect(0,0,width/2,height);
         touchLRect = new TouchRect(rectL, UserAction.MOVE_LEFT, true, false, null);
     	Rect rectR = new Rect(width/2,0,width,height);
     	touchRRect = new TouchRect(rectR, UserAction.MOVE_RIGHT, true, false, null);
-    	thread.setSurfaceSize(width, height);
+//    	thread.setSurfaceSize(width, height);
+    	 // create thread only; it's started in surfaceCreated()
+        thread = new LunarThread(holder, context, new Handler() {
+            @Override
+            public void handleMessage(Message m) {
+                mStatusText.setVisibility(m.getData().getInt("viz"));
+                mStatusText.setText(m.getData().getString("text"));
+            }
+        }, snakeRect);
+        thread.setSurfaceSize(width, height);
+        thread.setState(LunarThread.STATE_READY);
+        thread.setRunning(true);
+        thread.start();
     }
 
     /*
@@ -171,8 +185,8 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         // start the thread here so that we don't busy-wait in run()
         // waiting for the surface to be created
-        thread.setRunning(true);
-        thread.start();
+    	
+      
     }
 
     /*

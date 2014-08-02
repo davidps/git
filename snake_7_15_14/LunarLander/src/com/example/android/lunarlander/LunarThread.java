@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -189,12 +190,13 @@ class LunarThread extends Thread {
 	private Context mContext;
 
 	public LunarThread(SurfaceHolder surfaceHolder, Context context,
-			Handler handler) {
+			Handler handler, Rect rect) {
+		setName("Fred");
 		// get handles to some important objects
 		mSurfaceHolder = surfaceHolder;
 		mHandler = handler;
 		mContext = context;
-		snake = new Snake(context);
+		snake = new Snake(context, rect);
 
 		Resources res = context.getResources();
 		// cache handles to our key sprites & other drawables
@@ -337,7 +339,7 @@ class LunarThread extends Thread {
 		while (mRun) {
 			Canvas c = null;
 			try {
-				c = mSurfaceHolder.lockCanvas(null);
+				c = mSurfaceHolder.lockCanvas(g);
 				synchronized (mSurfaceHolder) {
 					if (mMode == STATE_RUNNING)
 						snake.updatePosition();

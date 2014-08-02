@@ -130,20 +130,20 @@ public class LunarLander extends Activity {
 
         // get handles to the LunarView from XML, and its LunarThread
         mLunarView = (LunarView) findViewById(R.id.lunar);
-        mLunarThread = mLunarView.getThread();
+//        mLunarThread = mLunarView.getThread();
 
         // give the LunarView a handle to the TextView used for messages
         mLunarView.setTextView((TextView) findViewById(R.id.text));
-
-        if (savedInstanceState == null) {
-            // we were just launched: set up a new game
-            mLunarThread.setState(LunarThread.STATE_READY);
-            Log.w(this.getClass().getName(), "SIS is null");
-        } else {
-            // we are being restored: resume a previous game
-            mLunarThread.restoreState(savedInstanceState);
-            Log.w(this.getClass().getName(), "SIS is nonnull");
-        }
+//
+//        if (savedInstanceState == null) {
+//            // we were just launched: set up a new game
+//            mLunarThread.setState(LunarThread.STATE_READY);
+//            Log.w(this.getClass().getName(), "SIS is null");
+//        } else {
+//            // we are being restored: resume a previous game
+//            mLunarThread.restoreState(savedInstanceState);
+//            Log.w(this.getClass().getName(), "SIS is nonnull");
+//        }
     }
 
     /**
